@@ -38,8 +38,9 @@ class App extends Component {
     _this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.mount.appendChild(_this.renderer.domElement);
     //镜头
-    _this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    _this.camera.position.set(300, 300, 350);
+    _this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    _this.camera.position.set(50, 250, 320);
+
     // controls  控制
     _this.control={
       top: false,
@@ -51,9 +52,11 @@ class App extends Component {
     _this.controls.enableDamping =true; // an animation loop is required when either damping or auto-rotation are enabled
     _this.controls.dampingFactor = 0.05;
     _this.controls.screenSpacePanning = true;
-    _this.controls.minDistance = 100;
-    _this.controls.maxDistance = 200;
-    _this.controls.maxPolarAngle = Math.PI / 2;
+    _this.controls.minDistance = 0;
+    _this.controls.maxDistance = 100;
+    _this.controls.maxPolarAngle = Math.PI ;
+    _this.controls.rotateSpeed=0.5;
+    
     var size = 10000;
     var divisions = 100;
     var gridHelper = new THREE.GridHelper(size, divisions);
@@ -63,32 +66,29 @@ class App extends Component {
     _this.clock = new THREE.Clock();
     _this.controlsMesh = new MeshControl(_this.camera, _this.controls,_this.scene);
 
-    // //load fbx
-    new FBXLoader().setPath("/").load("taxi.fbx", function (object) {
-      var  material=new THREE.MeshNormalMaterial();
-      object.traverse(function (mesh) {
-        if (!mesh.material) return;
-        mesh.material = material;
-      })
-      object.position.set(300, 0, 350);
-      _this.model=_this.controlsMesh.addObject(object);
-      _this.model.scale.set(0.1, 0.1, 0.1);
-      _this.scene.add(_this.model);
-    });
+    // // //load fbx
+    // new FBXLoader().setPath("/").load("taxi.fbx", function (object) {
+    //   var  material=new THREE.MeshNormalMaterial();
+    //   object.traverse(function (mesh) {
+    //     if (!mesh.material) return;
+    //     mesh.material = material;
+    //   })
+    //   object.position.set(300, 0, 350);
+    //   _this.model=_this.controlsMesh.addObject(object);
+    //   _this.model.scale.set(0.1, 0.1, 0.1);
+    //   _this.scene.add(_this.model);
+    // });
     //城市
-    new MTLLoader().setPath("/").load("clear.mtl", function (materials) {
+    new MTLLoader().setPath("/").load("city.mtl", function (materials) {
       materials.preload();
       new OBJLoader()
         .setMaterials(materials)
         .setPath("/")
         .load(
-          "clear.obj",
+          "city.obj",
           (object) => {
             object.position.set(50, 0, 3);
             _this.scene.add(object);
-            _this.model=_this.controlsMesh.addObject(object);
-          _this.model.scale.set(3, 3, 3);
-          _this.scene.add(_this.model);
           },
          
         );
@@ -102,10 +102,10 @@ class App extends Component {
         .load(
           "clown.obj",
           (object) => {
-            _this.scene.add(object);
             ObjectElement=object;
+            _this.camera.lookAt(object.position);
             _this.model=_this.controlsMesh.addObject(object);
-            _this.model.scale.set(3, 3, 3);
+            _this.model.scale.set(1, 1, 1);
             _this.scene.add(_this.model);
           },
          
@@ -244,42 +244,57 @@ class App extends Component {
     this.endPx = e.touches[0].radiusX;
     this.endPy = e.touches[0].radiusY;
     console.log(e);
-    console.log(Math.atan2(this.endY-this.startY,this.endX-this.startX)*(180/Math.PI));
-    if(this.endY<=this.startY-20){//向上移动
+    let atan=Math.atan2(this.endY-this.startY,this.endX-this.startX)*(180/Math.PI)
+    let elementId=this.refs.triangle;
+    
+    if(atan>=-135 && atan<=-45){//向上移动
       this.toKeyControl_move(87,true);
+      elementId.style.bottom="10px"
+      elementId.style.removeProperty("left");
+      elementId.style.removeProperty("top");
+      elementId.style.removeProperty("right");
     }
-    if(this.endY>this.startY-20){//向下移动
+    if(atan>=45 && atan<=135){
       this.toKeyControl_move(83,true);
+      elementId.style.top="10px"
+      elementId.style.removeProperty("left");
+      elementId.style.removeProperty("bottom");
+      elementId.style.removeProperty("right");
     }
-    if((this.endY==this.startY)&&(this.endX<=this.startX-20)){//向左移动
+    if((atan>135&&atan<=180) || (atan<=-180 && atan<-135)){
       this.toKeyControl_move(65,true);
+      elementId.style.right="10px"
+      elementId.style.removeProperty("top");
+      elementId.style.removeProperty("bottom");
+      elementId.style.removeProperty("left");
     }
-    if((this.endY==this.startY)&&(this.endX>this.startX-20)){//向右移动
+    if((atan>-45&& atan<0)||(atan>0 && atan<45)){
       this.toKeyControl_move(68,true);
+      elementId.style.left="10px"
+      elementId.style.removeProperty("top");
+      elementId.style.removeProperty("bottom");
+      elementId.style.removeProperty("right");
     }
   };
   /*手离开屏幕*/
   handleTouchEnd = (e) => {
     this.toKeyControl_move(123,false);
+    let elementId=this.refs.triangle;
+    elementId.style.removeProperty("left");
+    elementId.style.removeProperty("top");
+    elementId.style.removeProperty("bottom");
+    elementId.style.removeProperty("right");
   };
-
-
-
   render() {
     return(
     <>
         <div className="triangle">
-        {/* onClick={()=>{this.toKeyControl_move(87,true)}}  */}
-
           <div className="triangle_center">
-            
-            <div className="triangle_border_center" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove} onTouchEnd={
-              this.handleTouchEnd}></div>
-           
-          </div>
-     
+            <div className="triangle_border_center_father">
+              <div ref='triangle' className="triangle_border_center" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove} onTouchEnd={this.handleTouchEnd}></div>
+            </div> 
+          </div> 
         </div>
-        
       <div style={style} ref={(ref) => (this.mount = ref)} />
     </>
     )

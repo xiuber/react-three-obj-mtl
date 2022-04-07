@@ -9,10 +9,28 @@
 }
 
 .triangle_border_center{
-    width: 40px;
-    height: 40px;
-    border-radius: 40px;
-    background-color: black;
-    margin-bottom:50px;
-    margin-top: 4px;
+    background-color: #ff5000;
+    width: 70px;
+    height: 70px;
+    margin: 0px 0 0 0px;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 0 3px rgba(255,80,0,.2)
 }
+.triangle_border_center_father{
+    width:100px;
+    height:100px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin-bottom: 100px;
+    line-height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+div{
+    overflow: initial;
+}
+
