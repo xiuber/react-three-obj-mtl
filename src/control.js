@@ -75,21 +75,21 @@ class MeshControl {
         if (keyNum === 1) {
 
             if (opts.top) {
-                vec = current.clone().lerp(_history, - 1 / len);
+                vec = current.clone().lerp(_history, - 0.2 / len);
                 this.controlObj.rotation.y = 0;
             }
 
             if (opts.bottom) {
-                const history = current.clone().lerp(_history, 1 / len + 1);
-                vec = current.clone().lerp(_history, 1 / len);
+                const history = current.clone().lerp(_history, 0.2 / len + 1);
+                vec = current.clone().lerp(_history, 0.2/ len);
                 this.controlObj._history = history.clone();
-                this.controlObj.rotation.y = THREE.MathUtils.degToRad(180)
+                // this.controlObj.rotation.y = THREE.MathUtils.degToRad(90)
             }
 
             if (opts.left || opts.right) {
                 const rad = opts.left ? 90 : 270;
                 vec = this.updatePosition(rad, current, _history); 
-                this.controlObj.rotation.y = THREE.MathUtils.degToRad(-rad + 180);
+                // this.controlObj.rotation.y = THREE.MathUtils.degToRad(-rad + 90);
             }
 
         }
@@ -154,7 +154,7 @@ class MeshControl {
         const _d = _h.clone().rotateAround(_c, THREE.MathUtils.degToRad(rad));
         const _ds = new THREE.Vector3(_d.x, current.y, _d.y);
         const tl = current.distanceTo(_ds);
-        const vec = current.clone().lerp(_ds, 1 / tl);
+        const vec = current.clone().lerp(_ds, 0.2 / tl);
         const _x1 = vec.clone().sub(current);
         this.controlObj._history.add(_x1)
 

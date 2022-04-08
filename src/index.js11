@@ -19,6 +19,7 @@ class App extends Component {
     window.addEventListener("resize", this.onWindowResize);
     window.addEventListener("keydown", this.keyDownWalk);
     window.addEventListener("keyup",this.keyUpWalkStop);
+    window.addEventListener("click",this.clicknone);
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.onWindowResize);
@@ -39,36 +40,33 @@ class App extends Component {
     _this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.mount.appendChild(_this.renderer.domElement);
     //镜头
-    _this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-    _this.camera.position.set(0, 30, 0);
+    _this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 1000);
+    _this.camera.position.set(0, 40, 0);
     
     var size = 10000;
     var divisions = 100;
     var gridHelper = new THREE.GridHelper(size, divisions);
     _this.scene.add(gridHelper);
 
-    //controls  控制
-    _this.control={
-      top: false,
-      bottom: false,
-      left: false,
-      right: false
-    }
-    _this.controls = new OrbitControls(_this.camera, _this.renderer.domElement);
-    _this.controls.enableDamping =true; // an animation loop is required when either damping or auto-rotation are enabled
-    _this.controls.dampingFactor = 0.1;
-    _this.controls.screenSpacePanning = true;
-    _this.controls.minDistance = 1;
-    _this.controls.maxDistance = 50;
-    _this.controls.maxPolarAngle = Math.PI ;
-    _this.controls.rotateSpeed=0.6;
-    _this.controls.maxPolarAngle=Math.PI/2.5;//垂直角度的变换，禁止
-    _this.controls.minPolarAngle=Math.PI/2.5;
-    _this.controls.screenSpacePanning=false;
-    _this.controls.panSpeed=0.05;
-    _this.controls.enablePan=0.05;
+    // controls  控制
+    // _this.control={
+    //   top: false,
+    //   bottom: false,
+    //   left: false,
+    //   right: false
+    // }
+    // _this.controls = new OrbitControls(_this.camera, _this.renderer.domElement);
+    // _this.controls.enableDamping =true; // an animation loop is required when either damping or auto-rotation are enabled
+    // _this.controls.dampingFactor = 0.05;
+    // _this.controls.screenSpacePanning = true;
+    // _this.controls.minDistance = 0;
+    // _this.controls.maxDistance = 100;
+    // _this.controls.maxPolarAngle = Math.PI ;
+    // _this.controls.rotateSpeed=0.5;
 
-
+    _this.controls = new PointerLockControls(_this.camera, _this.renderer.domElement);
+    // _this.controls.maxPolarAngle=Math.PI/2.15;//垂直角度的变换，禁止
+    // _this.controls.minPolarAngle=Math.PI/2.15;
 
 
 
@@ -76,7 +74,7 @@ class App extends Component {
 
     //时钟
     _this.clock = new THREE.Clock();
-    _this.controlsMesh = new MeshControl(_this.camera, _this.controls,_this.scene);
+    // _this.controlsMesh = new MeshControl(_this.camera, _this.controls,_this.scene);
 
     // // //load fbx
     // new FBXLoader().setPath("/").load("taxi.fbx", function (object) {
@@ -117,11 +115,11 @@ class App extends Component {
             ObjectElement=object;
             object.position.set(0,0,0);
             // _this.controls.target=object.position;
-           // _this.scene.add(object);
+            _this.scene.add(object);
 
-            _this.model=_this.controlsMesh.addObject(object);
-            _this.model.scale.set(1, 1, 1);
-            _this.scene.add(_this.model);
+            // _this.model=_this.controlsMesh.addObject(object);
+            // _this.model.scale.set(1, 1, 1);
+            // _this.scene.add(_this.model);
           },
          
         );
@@ -142,6 +140,10 @@ class App extends Component {
     _this.scene.add(light);
   };
 
+  //锁定
+  clicknone=()=>{
+    this.controls.lock();
+  }
   //按下键盘
   keyDownWalk=(event)=>{
     this.toKeyControl(event.keyCode, true);
@@ -156,20 +158,20 @@ class App extends Component {
     var isUpdate = true;
     switch (code) {
         case 87:
-           _this.control.top = state;
-
+          // _this.control.top = state;
+          _this.controls.moveForward(1)
             break;
         case 83:
-           _this.control.bottom = state;
-
+          // _this.control.bottom = state;
+          _this.controls.moveForward(-1)
             break;
         case 65:
-          _this.control.left = state;
-
+          // _this.control.left = state;
+          _this.controls.moveRight(-1)
             break;
         case 68:
-           _this.control.right = state;
-
+          // _this.control.right = state;
+          _this.controls.moveRight(1)
             break;
         default:
             isUpdate = false;
@@ -183,40 +185,21 @@ class App extends Component {
     var isUpdate = true;
     switch (code) {
         case 87:
-           _this.control.top = state;
-           _this.control.bottom = false;
-           _this.control.left = false;
-           _this.control.right = false;
-
+          // _this.control.top = state;
+          _this.controls.moveForward(1)
             break;
         case 83:
-           _this.control.bottom = state;
-           _this.control.top = false;
-           _this.control.left = false;
-           _this.control.right = false;
-
+          // _this.control.bottom = state;
+          _this.controls.moveForward(-1)
             break;
         case 65:
-           _this.control.left = state;
-           _this.control.top = false;
-           _this.control.bottom = false;
-           _this.control.right = false;
-
+          // _this.control.left = state;
+          _this.controls.moveRight(-1)
             break;
         case 68:
-           _this.control.right = state;
-           _this.control.top = false;
-           _this.control.left = false;
-           _this.control.bottom = false;
-
+          // _this.control.right = state;
+          _this.controls.moveRight(1)
             break;
-            case 123:
-              _this.control.right = false;
-              _this.control.top = false;
-              _this.control.left = false;
-              _this.control.bottom = false;
-   
-               break;
         default:
             isUpdate = false;
     };
@@ -243,7 +226,7 @@ class App extends Component {
 
   animate = () => {
     this.requestID = window.requestAnimationFrame(this.animate);
-    this.controls.update();
+    // this.controls.update();
     var delta = this.clock.getDelta();
     this.updateAnimate(delta);
     this.renderer.render(this.scene, this.camera);
