@@ -1,7 +1,8 @@
 {
   "name": "react-three-obj-mtl",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
+  "author": "zhouxiangbo/波特卡斯/xiuber",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {

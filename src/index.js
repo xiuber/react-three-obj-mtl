@@ -27,7 +27,7 @@ import './index.css';
 let sceneAttributes = {
     "speed": 10,                //移动速度
     "runningSpeed": 30,         //跑步速度
-    "jump": 10,                 //跳跃高度
+    "jump": 15,                 //跳跃高度
     "gravity": 30,              //重力加速度
     "maxSpeed": 0.5,            //最大速度
     "background": 0x88ccee,     //背景颜色
