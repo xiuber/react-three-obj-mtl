@@ -6623,6 +6623,11 @@
   "resolved" "https://registry.npmjs.org/nice-try/-/nice-try-1.0.5.tgz"
   "version" "1.0.5"
 
+"nipplejs@^0.9.1":
+  "integrity" "sha512-Tu7ZaB1q0TgA+PH20s8i5Ngt3VmSCp8vxNVv/sOfGBAS0wwlNkJxnCD3bInC4iPg+W8dt80Pl+HU7B8y6dlXMQ=="
+  "resolved" "https://registry.npmmirror.com/nipplejs/-/nipplejs-0.9.1.tgz"
+  "version" "0.9.1"
+
 "no-case@^2.2.0":
   "integrity" "sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ=="
   "resolved" "https://registry.npmjs.org/no-case/-/no-case-2.3.2.tgz"

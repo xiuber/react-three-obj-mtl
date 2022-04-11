@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "nipplejs": "^0.9.1",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "2.1.8",
